@@ -11,4 +11,4 @@ By this program you can do: <br />
   3) Advertisement owner phone<br />
   4) Advertisement url<br />
 <br />
-P.S. To test the ptogram, you muy run it from OLXParser/Olx Parser/ConsoleApplication1/bin/Release/ConsoleApplication1.exe
+P.S. To test the program, you muy run it from OLXParser/Olx Parser/ConsoleApplication1/bin/Release/ConsoleApplication1.exe

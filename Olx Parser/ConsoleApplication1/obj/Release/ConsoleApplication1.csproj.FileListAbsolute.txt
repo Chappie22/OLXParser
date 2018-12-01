@@ -1,0 +1,11 @@
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\ConsoleApplication1.exe
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\ConsoleApplication1.pdb
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\HtmlAgilityPack.dll
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\WebDriver.dll
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\HtmlAgilityPack.pdb
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\bin\Release\HtmlAgilityPack.xml
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Release\ConsoleApplication1.csprojAssemblyReference.cache
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Release\ConsoleApplication1.csproj.CoreCompileInputs.cache
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Release\ConsoleApplication1.csproj.CopyComplete
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Release\ConsoleApplication1.exe
+C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Release\ConsoleApplication1.pdb

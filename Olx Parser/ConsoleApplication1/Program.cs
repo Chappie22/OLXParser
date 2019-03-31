@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using GemBox.Spreadsheet;
 using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+
 
 namespace ConsoleApplication1
 {
@@ -31,7 +33,10 @@ namespace ConsoleApplication1
         private static string _filePath;
 
         private static void Main()
-        {                       
+        {
+            
+
+
             Console.Write("Url: ");
             _currentUrl = Console.ReadLine();
             //
@@ -84,11 +89,11 @@ namespace ConsoleApplication1
             if (_filePath.Length <= 2) _filePath = String.Empty;
             
             var chromeOptions = new ChromeOptions();
-            var proxy = new Proxy {HttpProxy = "160.119.153.206:13093"};
-            chromeOptions.Proxy = proxy;
+            //var proxy = new Proxy {HttpProxy = "160.119.153.206:13093"};
+            //chromeOptions.Proxy = proxy;
             var driver = new ChromeDriver(chromeOptions);
             driver.Navigate().GoToUrl(_currentUrl);
-            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(3);
             try
             {
                 driver.FindElementByXPath("//*[@id='paramsListOpt']/div/div[3]/div[2]/div[2]/span").Click();
@@ -101,7 +106,7 @@ namespace ConsoleApplication1
             while (true)
             {
                 GetCurrentUrlsOnPage(driver);
-                if (!ChangePage(driver)) break;
+                if (!ChangePage()) break;
             }
 
             InListAllPageInfo(driver);
@@ -118,7 +123,27 @@ namespace ConsoleApplication1
                 File.AppendAllText(_filePath, "Made by Kirill Kryklyviy (sususik52@gmail.com)");
             }
             Console.WriteLine("Made by Kirill Kryklyviy (sususik52@gmail.com)");
-            //InFile(_filePath);
+            InFile(_filePath + "My.txt");
+
+            StreamWriter writer = new StreamWriter(new FileStream($@"D:/{_filePath}.txt", FileMode.Create));
+
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+            var workbook = ExcelFile.Load($@"D:/{_filePath}.xlsx");
+            var sheet = workbook.Worksheets.ActiveWorksheet;
+
+            int Wcounter = 1;
+
+            foreach (var info in Infos)
+            {
+                sheet.Cells[$"A{(Wcounter++).ToString()}"].Value = info.Phone;
+
+                writer.WriteLine(info.Phone);
+            }
+
+            writer.Flush();
+
+            workbook.Save(@"D:/sample.xlsx");
+
         }
 
         private static void InListAllPageInfo(ChromeDriver driver)
@@ -128,7 +153,7 @@ namespace ConsoleApplication1
                 Console.Clear();
                 Console.WriteLine($"Loading... {i+1} out of {Infos.Count-1}");
                 driver.ResetInputState();
-                if(!GetInfoFromPage(driver, Infos[i].Url, i))
+                if(!GetInfoFromPage( Infos[i].Url, i))
                 {
                     driver.Quit();
                     driver = new ChromeDriver();
@@ -136,107 +161,121 @@ namespace ConsoleApplication1
              }
         }
 
-        private static bool GetInfoFromPage(ChromeDriver driver, object url, int index)
+        private static bool GetInfoFromPage( object url, int index)
         {
-            driver.Navigate().GoToUrl((string) url);
-            try
+            using (ChromeDriver driver = new ChromeDriver())
             {
-                driver.FindElementByXPath("//*[@id='contact_methods']/li[2]/div").Click();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Find Element exception");
-            }
+                driver.Navigate().GoToUrl((string) url);
 
-            var htmlDoc = new HtmlDocument();
-            Console.WriteLine(driver.PageSource.Normalize().Length);
-            htmlDoc.LoadHtml(driver.PageSource.Normalize().Normalize().Normalize());
-            try
-            {
-                try
-                {
-                    Infos[index].Title = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='offerdescription']/div[2]/h1")
-                        .InnerText.Trim();
-                }
-                catch
-                {
-                    Console.WriteLine("Title exception");
-                }
 
                 try
                 {
-                    Infos[index].Name = htmlDoc.DocumentNode
-                        .SelectSingleNode("//*[@id='offeractions']/div[3]/div[2]/h4/a/text()")
-                        .InnerText.Trim();
+                    driver.FindElementByXPath("//*[@id='contact_methods']/li[2]/div").Click();
                 }
-                catch
+                catch (Exception)
+                {
+                    Console.WriteLine("Find Element exception");
+                }
+
+                var htmlDoc = new HtmlDocument();
+                Console.WriteLine(driver.PageSource.Normalize().Length);
+                htmlDoc.LoadHtml(driver.PageSource.Normalize().Normalize().Normalize());
+                try
                 {
                     try
                     {
-                        string anotherTryName = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='similarads']/h2")
+                        Infos[index].Title = htmlDoc.DocumentNode
+                            .SelectSingleNode("//*[@id='offerdescription']/div[2]/h1")
                             .InnerText.Trim();
-                        for (int i = 22; i < anotherTryName.Length; i++)
-                        {
-                            Infos[index].Name += anotherTryName[i];
-                        }
                     }
-                    catch (Exception)
+                    catch
                     {
-                        Console.WriteLine("No way to get the exception");
+                        Console.WriteLine("Title exception");
                     }
 
-                    Console.WriteLine("Name exception");
-                }
-
-                Infos[index].Phone = htmlDoc.DocumentNode
-                    .SelectSingleNode("//*[@id='contact_methodsBigImage']/li/div[2]/strong").InnerText.Trim();
-
-                int tryWhile = 0;
-                while (tryWhile <= 10)
-                {
-                    tryWhile++;
-                    if (Infos[index].Phone.Contains("x"))
+                    try
+                    {
+                        Infos[index].Name = htmlDoc.DocumentNode
+                            .SelectSingleNode("//*[@id='offeractions']/div[3]/div[2]/h4/a/text()")
+                            .InnerText.Trim();
+                    }
+                    catch
                     {
                         try
                         {
-                            driver.FindElementByXPath("//*[@id='contact_methods']/li[2]/div").Click();
-                            driver.Navigate().GoToUrl((string) url);
-                            Console.WriteLine(driver.PageSource.Normalize());
-                            htmlDoc.LoadHtml(driver.PageSource.Normalize().Normalize().Normalize());
-                            Infos[index].Phone = htmlDoc.DocumentNode
-                                .SelectSingleNode("//*[@id='contact_methodsBigImage']/li/div[2]/strong").InnerText.Trim();
+                            string anotherTryName = htmlDoc.DocumentNode.SelectSingleNode("//*[@id='similarads']/h2")
+                                .InnerText.Trim();
+                            for (int i = 22; i < anotherTryName.Length; i++)
+                            {
+                                Infos[index].Name += anotherTryName[i];
+                            }
                         }
                         catch (Exception)
                         {
-                            Console.WriteLine("Find Element exception");
-                           
+                            Console.WriteLine("No way to get the exception");
                         }
-                        Console.Clear();
-                        Console.WriteLine("Bad number");
+
+                        Console.WriteLine("Name exception");
                     }
-                    else break;
-                }
 
-                if (tryWhile >= 10)
+                    Infos[index].Phone = htmlDoc.DocumentNode
+                        .SelectSingleNode("//*[@id='contact_methodsBigImage']/li/div[2]/strong").InnerText.Trim();
+
+                    int tryWhile = 0;
+                    while (tryWhile <= 10)
+                    {
+                        tryWhile++;
+                        if (Infos[index].Phone.Contains("x"))
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath("//*[@id='contact_methods']/li[2]/div").Click();
+                                driver.Navigate().GoToUrl((string) url);
+                                Console.WriteLine(driver.PageSource.Normalize());
+                                htmlDoc.LoadHtml(driver.PageSource.Normalize().Normalize().Normalize());
+                                Infos[index].Phone = htmlDoc.DocumentNode
+                                    .SelectSingleNode("//*[@id='contact_methodsBigImage']/li/div[2]/strong").InnerText
+                                    .Trim();
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("Find Element exception");
+
+                            }
+
+                            Console.Clear();
+                            Console.WriteLine("Bad number");
+                        }
+                        else break;
+                    }
+
+                    if (tryWhile >= 10)
+                    {
+                        return false;
+                    }
+
+
+                    //FileAdd
+                    if (_filePath != String.Empty)
+                    {
+                        File.AppendAllText(_filePath,
+                            $"       = = = = = = {index + 1} = = = = = = = \n" + Infos[index].Title + "\n" +
+                            Infos[index].Name +
+                            "\n" + Infos[index].Phone + "\n" + Infos[index].Url + "\n\n");
+                    }
+
+                    
+                   
+
+
+                }
+                catch (Exception)
                 {
-                    return false;
+                    Console.WriteLine("Info exception");
                 }
 
-                //FileAdd
-                if (_filePath != String.Empty)
-                {
-                    File.AppendAllText(_filePath,
-                        $"       = = = = = = {index + 1} = = = = = = = \n" + Infos[index].Title + "\n" + Infos[index].Name +
-                        "\n" + Infos[index].Phone + "\n" + Infos[index].Url + "\n\n");
-                }
-                
+                return true;
             }
-            catch (Exception)
-            {
-                Console.WriteLine("Info exception");
-            }
-
-            return true;
         }
         
         private static void GetCurrentUrlsOnPage(ChromeDriver driver)
@@ -271,8 +310,11 @@ namespace ConsoleApplication1
         }
 
         
-        private static bool ChangePage(ChromeDriver driver)
+        private static bool ChangePage()
         {
+            using (ChromeDriver driver = new ChromeDriver())
+            {
+
             try
             {        
                 _pageCounter++;
@@ -286,17 +328,19 @@ namespace ConsoleApplication1
                 Console.WriteLine("Change page exception");
                 return false;
             }
+
+            }
         }
 
-//        private static void InFile(string filePath)
-//        {
-//            var counter = 1;
-//            var inFile = string.Empty;
-//            foreach (var info in Infos)
-//                inFile += $"       = = = = = = {counter++} = = = = = = = \n" + info.Title + "\n" + info.Name + "\n" +
-//                          info.Phone + "\n" + info.Url + "\n\n";
-//            inFile += "Made by Kirill Kryklyviy (sususik52@gmail.com)";
-//            File.WriteAllText(filePath, inFile);
-//        }
+        private static void InFile(string filePath)
+        {
+            var counter = 1;
+            var inFile = string.Empty;
+            foreach (var info in Infos)
+                inFile += $"       = = = = = = {counter++} = = = = = = = \n" + info.Title + "\n" + info.Name + "\n" +
+                          info.Phone + "\n" + info.Url + "\n\n";
+            inFile += "Made by Kirill Kryklyviy (sususik52@gmail.com)";
+            File.WriteAllText(filePath, inFile);
+        }
     }
 }

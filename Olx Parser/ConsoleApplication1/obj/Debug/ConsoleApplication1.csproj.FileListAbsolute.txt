@@ -8,3 +8,15 @@ C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApp
 C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
 C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojAssemblyReference.cache
 C:\Users\Админ\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CopyComplete
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojAssemblyReference.cache
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CopyComplete
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\GemBox.Spreadsheet.dll
+C:\Users\Админ\Documents\GitHub\OLXParser\Olx Parser\ConsoleApplication1\bin\Debug\GemBox.Spreadsheet.xml
